@@ -31,6 +31,11 @@ jobs:
         run: |
           npm install -g @anthropic-ai/claude-code
           
+      - name: Configure git
+        run: |
+          git config --global user.name "Claude Code Bot"
+          git config --global user.email "claude-code@example.com"
+          
       - name: Run Claude Code
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -43,11 +48,20 @@ jobs:
             PROMPT="${{ github.event.comment.body }}"
           fi
           
-          # Run Claude Code (correct command is 'claude', not 'claude-code')
-          claude "$PROMPT"
+          # Run Claude Code with file creation options
+          echo "$PROMPT" | claude --non-interactive --write-files --commit-changes
+          
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if [[ `git status --porcelain` ]]; then
+            echo "changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "changes=false" >> $GITHUB_OUTPUT
+          fi
           
       - name: Create Pull Request
-        if: success()
+        if: steps.check_changes.outputs.changes == 'true'
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
