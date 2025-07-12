@@ -49,7 +49,7 @@ jobs:
           fi
           
           # Run Claude Code with file creation options (using print mode for CI)
-          claude -p "$PROMPT" --output-format text --max-turns 3
+          claude -p "$PROMPT" --output-format text --max-turns 10 --dangerously-skip-permissions
           
       - name: Check for changes
         id: check_changes
