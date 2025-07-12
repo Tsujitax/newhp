@@ -48,8 +48,8 @@ jobs:
             PROMPT="${{ github.event.comment.body }}"
           fi
           
-          # Run Claude Code with file creation options
-          echo "$PROMPT" | claude --non-interactive --write-files --commit-changes
+          # Run Claude Code with file creation options (using print mode for CI)
+          claude -p "$PROMPT" --output-format text --max-turns 3
           
       - name: Check for changes
         id: check_changes
