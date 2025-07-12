@@ -10,6 +10,7 @@ permissions:
   contents: write
   issues: write
   pull-requests: write
+  actions: write
 
 jobs:
   claude-code:
@@ -65,6 +66,10 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          add-paths: |
+            *.html
+            *.css
+            *.js
           commit-message: "Claude Code: ${{ github.event.issue.title }}"
           title: "Claude Code: ${{ github.event.issue.title }}"
           body: |
