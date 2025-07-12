@@ -43,8 +43,8 @@ jobs:
             PROMPT="${{ github.event.comment.body }}"
           fi
           
-          # Run Claude Code
-          claude-code execute --prompt "$PROMPT" --commit --push
+          # Run Claude Code (correct command is 'claude', not 'claude-code')
+          claude "$PROMPT"
           
       - name: Create Pull Request
         if: success()
